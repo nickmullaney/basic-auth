@@ -1,8 +1,8 @@
 'use strict'
 
-const { request } = require("express");
+const express = require("express");
 const router = express.Router();
-const {user} = require('../models');
+const {Users} = require('../models');
 
 
 // Signup Route -- create a new user

@@ -1,10 +1,11 @@
 'use strict';
 
-const { DataTypes } = require("sequelize");
+const { SequelizeDatabase ,DataTypes } = require("sequelize");
+const { userModel } = require(".");
 
-module.exports = (SequelizeDatabase, DataTypes)
+module.exports = (SequelizeDatabase, DataTypes) => {
 
-return SequelizeDatabase.define('User', {
+return SequelizeDatabase.define('user', {
   username: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -22,5 +23,9 @@ return SequelizeDatabase.define('User', {
   email: {
     type: DataTypes.STRING,  
     unique: true,
-  },
+  }
 });
+
+
+
+}

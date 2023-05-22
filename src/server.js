@@ -5,7 +5,7 @@ const base64 = require('base-64');
 const { Sequelize, DataTypes } = require('sequelize');
 const notFound = require('./middleware/404');
 const errorHandler = require('./middleware/500');
-const router = require('./auth/routes');
+const router = require('./auth/routes/router');
 
 // Prepare the express app
 const app = express();
