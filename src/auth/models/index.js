@@ -1,7 +1,7 @@
 'use strict';
 
 const {Sequelize, DataTypes }= require('sequelize');
-const users = require('./users');
+const userSchema = require('./user');
 
 // will make dynamic for testing environment.
 const DATABASE_URL = process.env.DATABASE_URL === 'test' ? 'sqlite:memory' : process.env.DATABASE_URL;
@@ -9,9 +9,9 @@ const DATABASE_URL = process.env.DATABASE_URL === 'test' ? 'sqlite:memory' : pro
 // Database singleton
 const SequelizeDatabase =  new Sequelize(DATABASE_URL, {});
 
-const userModel = users(SequelizeDatabase, DataTypes);
+const Users = userSchema(SequelizeDatabase, DataTypes);
 
 module.exports = {
   SequelizeDatabase,
-  userModel,
-}
+  Users,
+};
