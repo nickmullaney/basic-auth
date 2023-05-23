@@ -1,8 +1,8 @@
 require('dotenv').config();
 const express = require('express');
-const bcrypt = require('bcrypt');
-const base64 = require('base-64');
-const { Sequelize, DataTypes } = require('sequelize');
+// const bcrypt = require('bcrypt');
+// const base64 = require('base-64');
+// const { Sequelize, DataTypes } = require('sequelize');
 const notFound = require('./middleware/404');
 const errorHandler = require('./middleware/500');
 const authRouter = require('./auth/router');
@@ -15,7 +15,12 @@ app.use(express.json());
 // Process FORM input and put the data on req.body
 app.use(express.urlencoded({ extended: true }));
 
+//Middleware auth & error handlers
 app.use(authRouter);
+app.use(errorHandler);
+app.use(notFound);
+
+
 
 app.get('/', (req, res, next) => {
   res.status(200).send('Proof of Life');
