@@ -37,8 +37,8 @@ clone repo, `npm i`, then run `nodemon` in the terminal
 
 #### Routes
 <!-- All routes should be documented -->
-- GET : `/success` - specific route to hit
-- GET : `/person` - specific route to hit
+- GET : `/signin` - specific route to hit
+- GET : `/signup` - specific route to hit
 - GET : `/` - proof of life
 
 #### Tests
@@ -47,5 +47,5 @@ to run tests after running `npm i`, run the command `npm test`
 
 #### UML
 
-![image]()
+![image](./assets/lab6%20UML.png)
 ![image]()
