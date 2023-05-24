@@ -1,45 +1,37 @@
 'use strict';
 
-const { app } = require('express');
-const { SequelizeDatabase } = require('sequelize');
-
-// These tests are specific to lab 6 solution and may need to be updated to pass for lab 7 and 8
-
+// this test suite passing and specific to lab-06, basic auth.  Do they work for lab-07?
 const supertest = require('supertest');
 
+const { sequelize } = require('../src/auth/models');
+const { app } = require('../src/server');
 
 const request = supertest(app);
 
-beforeAll(async() => {
-  await SequelizeDatabase.sync();
+beforeAll(async () => {
+  await sequelize.sync();
 });
 
 afterAll(async () => {
-  await SequelizeDatabase.drop();
+  await sequelize.drop();
 });
 
-describe ('Auth Routes', (() => {
-  test('allow for user signup.',async () =>{
+describe('Auth Routes', () => {
+  test('allow for signup', async () => {
     const response = await request.post('/signup').send({
-      username: 'Teddy',
-      password: 'baddies123',
-      role: 'admin',
-      email: 'teddy@fuzzys.com',
+      username: 'Tester', 
+      password: 'pass',
     });
 
     expect(response.status).toEqual(200);
-    expect(response.body.username).toEqual('Teddy');
-    expect(response.body.role).toEqual('admin');
-    expect(response.body.email).toEqual('teddy@fuzzys.com');
-    
   });
+  test('allow for signin', async () => {
+    const response = await request.post('/signin').set('Authorization', 'Basic VGVzdGVyOnBhc3M=');
 
-  test('allow for user to signin', async() => {
-    const response = await request.post('/signin').set('Authorization','Basic THVja3k6d29vZg==');
     expect(response.status).toEqual(200);
-    expect(response.body.username).toEqual('Teddy');
-    expect(response.body.role).toEqual('admin');
-    expect(response.body.email).toEqual('teddy@fuzzys.com');
   });
 
-}));
+});
+
+
+

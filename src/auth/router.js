@@ -1,32 +1,33 @@
 'use strict';
 
 const express = require('express');
-const router = express.Router();
 const bcrypt = require('bcrypt');
-const { Users } = require('./models');
+
+
 const basicAuth = require('./middleware/basic');
+const { userModel } = require('./models');
+const router = express.Router();
 
-// Signup Route -- create a new user
-// Two ways to test this route with httpie
-// echo '{"username":"john","password":"foo"}' | http post :3000/signup
-// http post :3000/signup username=john password=foo
-router.post('/signup', async (req, res) => {
-
+router.post('/signup', async (req, res, next) => {
+  // great proof of life
+  // res.status(200).send('this route works');
   try {
-    req.body.password = await bcrypt.hash(req.body.password, 10);
-    const user = await Users.create(req.body);
-    res.status(200).json(user);
-  } catch (e) { res.status(403).send('Error Creating User'); }
+    const { username, password } = req.body;
+    const encryptedPassword = await bcrypt.hash(password, 5);
+    let newUser = await userModel.create({
+      username,
+      password: encryptedPassword,
+    });
+    res.status(200).send(newUser);
+  } catch (err) {
+    console.error(err);
+    next('signup error occurred');
+  }
 });
 
-// Signin Route -- login with username and password
-// test with httpie
-// http post :3000/signin -a john:foo
-router.post('/signin', basicAuth, async (req, res, next) => {
-
-  try {
-    res.status(200).json(req.user);
-  } catch (error) { next('Invalid Login. Message: ', error.message); }
+// signin will require basic auth middleware that PROVES the signin password is equivalent to the hashed password that we have saved in our DB
+router.post('/signin', basicAuth, (req, res, next) => {
+  res.status(200).json(req.user);
 });
 
 module.exports = router;
