@@ -1,31 +1,33 @@
-'use strict';
-
-const base64 = require('base-64');
+`use strict`;
 const bcrypt = require('bcrypt');
+const base64 = require('base-64');
 const { userModel } = require('../../models');
 
-
 const basicAuth = async (req, res, next) => {
-  let { authorization } = req.headers;
-  // console.log('authorization: ', authorization);
-  //                                            Basic username:password
-  // 1. isolate the encoded part of the string - Basic UnlhbjpwYXNz
+  let authorization = req.headers;
+  /*
+      req.headers.authorization is : "Basic am9objpmb28="
+      To get username and password from this, take the following steps:
+        - Turn that string into an array by splitting on ' '
+        - Pop off the last value
+        - Decode that encoded string so it returns to user:pass
+        - Split on ':' to turn it into an array
+        - Pull username and password from that array
+    */
+
   let authString = authorization.split(' ')[1];
   console.log('authString:', authString);
 
-  // 2. decode the authstring
   let decodedAuthString = base64.decode(authString);
   console.log('decodedAuthString:', decodedAuthString);
 
-  // 3. I need to isolate the password FROM the decoded string
   let [username, password] = decodedAuthString.split(':');
-  // console.log('password:', password);
-  
-  let user = await userModel.findOne({where: { username }});
+
+  let user = await userModel.findOne({ where: { username } });
   // console.log('here.........user:', user);
-  if (user){
+  if (user) {
     let validUser = await bcrypt.compare(password, user.password);
-    if(validUser){
+    if (validUser) {
       req.user = user;
       next();
     } else {
