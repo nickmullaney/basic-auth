@@ -48,4 +48,3 @@ to run tests after running `npm i`, run the command `npm test`
 #### UML
 
 ![image](./assets/lab6%20UML.png)
-![image]()
